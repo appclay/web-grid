@@ -1,0 +1,100 @@
+$baseWidth: 160;
+$gridSteps: 2 3 4 5 6 7;
+$sizes: ();
+$percentages: (0: 0%, 10: 10%, 20: 20%, 25: 25%, 30: 30%, 33: 100%/3, 40: 40%, 50: 50%, 60: 60%, 66: 2*100%/3, 70: 70%, 75: 75%, 80: 80%, 90: 90%, 100: 100%);
+$whitespaceSizes: 0 5 10 20 30 40 50;
+$whitespaceDeclarations: ("": "", x: (-left, -right), y: (-top, -bottom), l: -left, r: -right, t: -top, b: -bottom);
+
+@each $step in $gridSteps {
+	$sizes: join($sizes, $step * $baseWidth); 
+}
+
+@each $pageSize in $sizes {
+	.wg-page--#{$pageSize} {
+		margin: 0 auto;
+		max-width: $pageSize + px;
+		padding: 0;
+	}
+}
+
+.wg-grid {
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	letter-spacing: -1em;
+	line-height: 0;
+}
+
+.wg-grid--center {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+.wg-grid--justify {
+	margin: 0;
+	padding: 0;
+	text-align: justify;
+	
+	&:after {
+		content: '';
+		display: inline-block;
+		font-size: 0;
+		height: 0;
+		overflow: hidden;
+		width: 100%;
+	}
+}
+
+.wg-box {
+	box-sizing: border-box;
+	display: inline-block;
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+	text-align: left;
+	width: 100%;
+	letter-spacing: normal;
+	line-height: normal;
+}
+
+@mixin grid-step($gridStep) {
+	@each $name, $width in $percentages {
+		.wg-#{$name}pcAt#{$gridStep} {
+			width: $width;
+		}
+	}
+	
+	.wg-hideAt#{$gridStep} {
+		display: none;
+	}
+	
+	.wg-showAt#{$gridStep} {
+		display: inline-block;
+	}
+	
+	@each $prefix, $declarationList in $whitespaceDeclarations {
+		@each $size in $whitespaceSizes {
+			.wg-m#{$prefix}#{$size}pxAt#{$gridStep} {
+				@each $declaration in $declarationList {
+					margin#{$declaration}: #{$size}px;
+				}
+			}
+			
+			.wg-p#{$prefix}#{$size}pxAt#{$gridStep} {
+				@each $declaration in $declarationList {
+					padding#{$declaration}: #{$size}px;
+				}
+			}
+		}
+	}
+}
+
+@include grid-step(0);
+
+@for $i from 1 through length($gridSteps) {
+	$gridStep: nth($gridSteps, $i);
+	@media (min-width: nth($sizes, $i) + px) {
+		@include grid-step($gridStep);
+	}
+}
