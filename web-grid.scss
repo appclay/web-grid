@@ -56,6 +56,7 @@ $whitespaceDeclarations: ("": "", x: (-left, -right), y: (-top, -bottom), l: -le
 	width: 100%;
 	letter-spacing: normal;
 	line-height: normal;
+	vertical-align: top;
 }
 
 @mixin grid-step($gridStep) {

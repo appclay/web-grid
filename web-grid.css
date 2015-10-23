@@ -61,7 +61,8 @@
   text-align: left;
   width: 100%;
   letter-spacing: normal;
-  line-height: normal; }
+  line-height: normal;
+  vertical-align: top; }
 
 .wg-0pcAt0 {
   width: 0%; }
